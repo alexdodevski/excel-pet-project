@@ -7,7 +7,9 @@
     },
     "rules": {
        "quotes": "off",
-       "linebreak-style": "off"
+       "linebreak-style": "off",
+       "require-jsdoc": "off",
+       "object-curly-spacing": "off"
     },
     "extends": ["eslint:recommended","google"]
 }
