@@ -7,7 +7,7 @@ export class Excel {
     this.components = options.components || [];
   }
 
-  initComponents(Component, root) {
+  initComponent(Component, root) {
     const $elComponent = DOMutility.create("div", Component.className);
     const component = new Component($elComponent);
 
@@ -21,7 +21,7 @@ export class Excel {
     const $root = DOMutility.create("div", Excel.className);
 
     this.components = this.components.map((Component) =>
-      this.initComponents(Component, $root)
+      this.initComponent(Component, $root)
     );
 
     return $root;
