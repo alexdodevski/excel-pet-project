@@ -12,4 +12,7 @@ export const DOMutility = {
   clear(el) {
     this.addHTML(el, "");
   },
+  getCoords(el) {
+    return el.getBoundingClientRect();
+  },
 };
