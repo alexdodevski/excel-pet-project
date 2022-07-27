@@ -1,5 +1,4 @@
 import ExcelComponent from "@core/ExcelComponent";
-import { shouldResize } from "./table.functions";
 import { resizer } from "./table.resizer";
 import { createTable } from "./table.template";
 
@@ -17,6 +16,9 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(e) {
-    shouldResize(e) ? resizer(this.$root, e) : false;
+    const resize = e.target.dataset.resize;
+    if (resize) {
+      resizer(this.$root, e);
+    }
   }
 }
