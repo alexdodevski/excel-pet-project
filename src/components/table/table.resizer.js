@@ -15,9 +15,9 @@ const minHeight = 24;
 export function resizer($root, e) {
   e.preventDefault();
   const $resizer = e.target;
-  const elemAtrr = $resizer.dataset;
+  const resizeType = $resizer.dataset;
 
-  elemAtrr.resize === "col"
+  resizeType.resize === "col"
     ? columnResize($resizer, $root)
     : rowResize($resizer);
 }
