@@ -7,28 +7,28 @@ export class Excel {
     this.components = options.components || [];
   }
 
-  initComponent(Component, root) {
+  initComponent(Component) {
     const $elComponent = DOMutility.create("div", Component.className);
     const component = new Component($elComponent);
 
     DOMutility.addHTML($elComponent, component.toHTML());
-    root.append($elComponent);
+    this.$excel.append($elComponent);
 
     return component;
   }
 
-  getRoot() {
-    const $root = DOMutility.create("div", Excel.className);
+  createExcel() {
+    this.$excel = DOMutility.create("div", Excel.className);
 
     this.components = this.components.map((Component) =>
-      this.initComponent(Component, $root)
+      this.initComponent(Component)
     );
-
-    return $root;
   }
 
   render() {
-    this.$app.append(this.getRoot());
+    this.createExcel();
+    this.$app.append(this.$excel);
     this.components.forEach((component) => component.init());
+    console.log(this.components);
   }
 }
