@@ -15,4 +15,10 @@ export const DOMutility = {
   getCoords(el) {
     return el.getBoundingClientRect();
   },
+  addClass(el, className) {
+    el.classList.add(className);
+  },
+  removeClass(el, className) {
+    el.classList.remove(className);
+  },
 };

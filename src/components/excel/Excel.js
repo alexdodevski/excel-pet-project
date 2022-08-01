@@ -2,6 +2,7 @@ import { DOMutility } from "../../core/dom.utility";
 
 export class Excel {
   static className = "excel";
+
   constructor(selector, options) {
     this.$app = document.querySelector(selector);
     this.components = options.components || [];
@@ -29,6 +30,5 @@ export class Excel {
     this.createExcel();
     this.$app.append(this.$excel);
     this.components.forEach((component) => component.init());
-    console.log(this.components);
   }
 }

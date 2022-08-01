@@ -1,6 +1,7 @@
 import ExcelComponent from "@core/ExcelComponent";
 import { resizer } from "./table.resizer";
 import { createTable } from "./table.template";
+import { TableSelection } from "./TableSelection";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -15,10 +16,21 @@ export class Table extends ExcelComponent {
     return createTable(34);
   }
 
-  onMousedown(e) {
-    const resize = e.target.dataset.resize;
-    if (resize) {
-      resizer(this.$root, e);
+  prepare() {
+    this.selection = new TableSelection(this.$root);
+  }
+
+  init() {
+    super.init();
+    const $firstCell = this.$root.querySelector("[data-id='0:0']");
+    this.selection.select($firstCell);
+  }
+
+  onMousedown(event) {
+    const $target = event.target;
+    if ($target.dataset.resize) {
+      event.preventDefault();
+      resizer(this.$root, $target);
     }
   }
 }
