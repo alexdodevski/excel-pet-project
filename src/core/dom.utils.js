@@ -1,9 +1,7 @@
-export const DOMutility = {
+export const DOMutils = {
   create(tagName, classes = null) {
     const el = document.createElement(tagName);
-    if (classes) {
-      el.classList.add(classes);
-    }
+    classes ? el.classList.add(classes) : null;
     return el;
   },
   addHTML(el, html) {
@@ -20,5 +18,12 @@ export const DOMutility = {
   },
   removeClass(el, className) {
     el.classList.remove(className);
+  },
+  getCellId($el) {
+    const id = $el.dataset.id.split(":");
+    return {
+      row: +id[0],
+      col: +id[1],
+    };
   },
 };

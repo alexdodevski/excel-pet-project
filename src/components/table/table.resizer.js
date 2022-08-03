@@ -1,4 +1,4 @@
-import { DOMutility } from "../../core/dom.utility";
+import { DOMutils } from "../../core/dom.utils";
 
 const scrollHeight = Math.max(
   document.body.scrollHeight,
@@ -23,7 +23,7 @@ export function resizer($table, $resizer) {
 function columnResize($resizer, $table) {
   let value;
   const $columnHeader = $resizer.closest('[data-type="resizeble"]');
-  const columnCoords = DOMutility.getCoords($columnHeader);
+  const columnCoords = DOMutils.getCoords($columnHeader);
   const idCol = $columnHeader.dataset.col;
 
   const $column = $table.querySelectorAll(`[data-col='${idCol}']`);
@@ -52,7 +52,7 @@ function columnResize($resizer, $table) {
 function rowResize($resizer) {
   let value;
   const $row = $resizer.closest('[data-type="resizeble"]');
-  const rowCoords = DOMutility.getCoords($row);
+  const rowCoords = DOMutils.getCoords($row);
 
   $resizer.style.width = $row.offsetWidth + "px";
   $resizer.style.zIndex = 1000;

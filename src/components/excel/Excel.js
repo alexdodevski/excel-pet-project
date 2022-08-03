@@ -1,4 +1,4 @@
-import { DOMutility } from "../../core/dom.utility";
+import { DOMutils } from "../../core/dom.utils";
 
 export class Excel {
   static className = "excel";
@@ -9,17 +9,17 @@ export class Excel {
   }
 
   initComponent(Component) {
-    const $elComponent = DOMutility.create("div", Component.className);
+    const $elComponent = DOMutils.create("div", Component.className);
     const component = new Component($elComponent);
 
-    DOMutility.addHTML($elComponent, component.toHTML());
+    DOMutils.addHTML($elComponent, component.toHTML());
     this.$excel.append($elComponent);
 
     return component;
   }
 
   createExcel() {
-    this.$excel = DOMutility.create("div", Excel.className);
+    this.$excel = DOMutils.create("div", Excel.className);
 
     this.components = this.components.map((Component) =>
       this.initComponent(Component)
