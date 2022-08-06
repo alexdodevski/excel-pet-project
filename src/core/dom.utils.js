@@ -29,4 +29,7 @@ export const DOMutils = {
       col: +id[1],
     };
   },
+  changeText($el, text) {
+    $el.textContent = text;
+  },
 };

@@ -1,6 +1,5 @@
 import ExcelComponent from "@core/ExcelComponent";
 import { DOMutils } from "../../core/dom.utils";
-import { changeText } from "../../core/utils";
 
 export class Formula extends ExcelComponent {
   static className = "excel__formula";
@@ -16,8 +15,14 @@ export class Formula extends ExcelComponent {
   init() {
     super.init();
     this.$input = this.$root.querySelector(".input");
-    this.subscribeOnEvent("table:select", changeText.bind(this, this.$input));
-    this.subscribeOnEvent("table:input", changeText.bind(this, this.$input));
+    this.subscribeOnEvent(
+      "table:select",
+      DOMutils.changeText.bind(this, this.$input)
+    );
+    this.subscribeOnEvent(
+      "table:input",
+      DOMutils.changeText.bind(this, this.$input)
+    );
   }
 
   destroy() {
@@ -32,7 +37,6 @@ export class Formula extends ExcelComponent {
 
   onInput() {
     const text = DOMutils.getText(this.$input);
-    console.log(text);
     this.emitEvent("formula:input", text);
   }
 

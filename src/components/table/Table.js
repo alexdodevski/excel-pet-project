@@ -29,9 +29,9 @@ export class Table extends ExcelComponent {
     const $firstCell = this.$root.querySelector("[data-id='0:0']");
     this.selection.select($firstCell);
 
-    this.selectCell($firstCell, "table:select");
+    this.giveCellText($firstCell, "table:select");
     this.subscribeOnEvent("formula:input", this.selection.changeSelectText);
-    this.subscribeOnEvent("formula:done", this.selection.changeSelectText);
+    this.subscribeOnEvent("formula:done", this.selection.select);
   }
 
   destroy() {
@@ -39,7 +39,7 @@ export class Table extends ExcelComponent {
     this.unsubscribeOnEvent();
   }
 
-  selectCell($cell, event) {
+  giveCellText($cell, event) {
     const text = DOMutils.getText($cell);
     this.emitEvent(event, text);
   }
@@ -55,7 +55,7 @@ export class Table extends ExcelComponent {
         this.selection.selectGroup($target);
       } else {
         this.selection.select($target);
-        this.selectCell(this.selection.current, "table:select");
+        this.giveCellText(this.selection.current, "table:select");
       }
     }
   }
@@ -77,7 +77,7 @@ export class Table extends ExcelComponent {
       const id = DOMutils.getCellId(this.selection.current);
       const $next = this.$root.querySelector(nextSelect(key, id));
       this.selection.select($next);
-      this.selectCell($next, "table:select");
+      this.giveCellText($next, "table:select");
     }
   }
 
@@ -85,7 +85,7 @@ export class Table extends ExcelComponent {
     const $target = event.target;
 
     if (isCell($target)) {
-      this.selectCell(this.selection.current, "table:input");
+      this.giveCellText(this.selection.current, "table:input");
     }
   }
 }

@@ -1,5 +1,4 @@
 import { DOMutils } from "../../core/dom.utils";
-import { changeText } from "../../core/utils";
 import { range } from "./table.functions";
 
 export class TableSelection {
@@ -16,7 +15,7 @@ export class TableSelection {
     this.changeSelectText = this.changeSelectText.bind(this);
   }
 
-  select($el) {
+  select($el = this.current) {
     this.clearSelect();
     this.group.push($el);
     this.current = $el;
@@ -55,6 +54,6 @@ export class TableSelection {
   }
 
   changeSelectText(text) {
-    return changeText(this.current, text);
+    return DOMutils.changeText(this.current, text);
   }
 }
