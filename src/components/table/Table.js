@@ -75,7 +75,9 @@ export class Table extends ExcelComponent {
     if (keys.includes(key) && !event.shiftKey) {
       event.preventDefault();
       const id = DOMutils.getCellId(this.selection.current);
-      const $next = this.$root.querySelector(nextSelect(key, id));
+      const $next = this.$root.querySelector(
+        nextSelect(key, id, this.#ROWS - 1)
+      );
       this.selection.select($next);
       this.giveCellText($next, "table:select");
     }

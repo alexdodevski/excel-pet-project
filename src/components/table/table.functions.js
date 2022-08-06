@@ -6,16 +6,19 @@ export function isCell($el) {
   return $el.dataset.id;
 }
 
-export function nextSelect(key, { row, col }) {
+export function nextSelect(key, { row, col }, rowsCount) {
   const MIN_VALUE = 0;
+  const MAX_VALUE = 25;
   switch (key) {
     case "Enter":
     case "ArrowDown":
       row++;
+      if (row > rowsCount) row = rowsCount;
       break;
     case "Tab":
     case "ArrowRight":
       col++;
+      if (col > MAX_VALUE) col = MAX_VALUE;
       break;
     case "ArrowLeft":
       col--;
