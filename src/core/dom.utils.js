@@ -7,6 +7,9 @@ export const DOMutils = {
   addHTML(el, html) {
     el.innerHTML = html;
   },
+  getText(el) {
+    return el.textContent.trim();
+  },
   clear(el) {
     this.addHTML(el, "");
   },

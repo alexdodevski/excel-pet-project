@@ -1,18 +1,26 @@
 import { DOMutils } from "../../core/dom.utils";
-import { range } from "../../core/utils";
+import { changeText } from "../../core/utils";
+import { range } from "./table.functions";
 
 export class TableSelection {
   #CLASS_NAME = "selected";
   constructor($table) {
     this.group = [];
     this.$table = $table;
-    this.selected;
+    this.current;
+    this.init();
+  }
+
+  init() {
+    this.select = this.select.bind(this);
+    this.changeSelectText = this.changeSelectText.bind(this);
   }
 
   select($el) {
     this.clearSelect();
     this.group.push($el);
-    this.selected = $el;
+    this.current = $el;
+    this.current.focus();
     DOMutils.addClass($el, this.#CLASS_NAME);
   }
 
@@ -28,7 +36,7 @@ export class TableSelection {
   }
 
   getCells($el) {
-    const currentId = DOMutils.getCellId(this.selected);
+    const currentId = DOMutils.getCellId(this.current);
     const targetId = DOMutils.getCellId($el);
 
     const cols = range(currentId.col, targetId.col);
@@ -44,5 +52,9 @@ export class TableSelection {
     );
 
     return $cells;
+  }
+
+  changeSelectText(text) {
+    return changeText(this.current, text);
   }
 }
