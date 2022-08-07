@@ -6,7 +6,6 @@ export default class ExcelComponent extends DomListener {
     this.name = options.name;
     this.emitter = options.emitter;
     this.subs = {};
-    this.prepare();
   }
   toHTML() {
     return ``;
@@ -22,8 +21,8 @@ export default class ExcelComponent extends DomListener {
     this.removeDOMListeners();
   }
 
-  emitEvent(event, data) {
-    this.emitter.emit(event, data);
+  emitEvent(event, ...data) {
+    this.emitter.emit(event, ...data);
   }
 
   subscribeOnEvent(event, fn) {
@@ -34,6 +33,7 @@ export default class ExcelComponent extends DomListener {
   unsubscribeOnEvent() {
     // eslint-disable-next-line guard-for-in
     for (const [event, fn] of Object.entries(this.subs)) {
+      console.log("from component", event, fn);
       this.emitter.unsubscribe(event, fn);
     }
   }

@@ -15,11 +15,12 @@ export class Excel {
       emitter: this.emitter,
     };
 
-    const $elComponent = DOMutils.create("div", Component.className);
-    const component = new Component($elComponent, componentOptions);
+    const $rootComponent = DOMutils.create("div", Component.className);
+    const component = new Component($rootComponent, componentOptions);
 
-    DOMutils.addHTML($elComponent, component.toHTML());
-    this.$excel.append($elComponent);
+    DOMutils.addHTML($rootComponent, component.toHTML());
+    component.prepare();
+    this.$excel.append($rootComponent);
 
     return component;
   }

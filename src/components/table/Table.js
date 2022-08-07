@@ -22,6 +22,7 @@ export class Table extends ExcelComponent {
 
   prepare() {
     this.selection = new TableSelection(this.$root);
+    this.subscribeEvents();
   }
 
   init() {
@@ -30,8 +31,14 @@ export class Table extends ExcelComponent {
     this.selection.select($firstCell);
 
     this.giveCellText($firstCell, "table:select");
-    this.subscribeOnEvent("formula:input", this.selection.changeSelectText);
-    this.subscribeOnEvent("formula:done", this.selection.select);
+    setTimeout(() => this.unsubscribeOnEvent(), 2000);
+  }
+
+  subscribeEvents() {
+    this.subscribeOnEvent("formula:input", (text) =>
+      DOMutils.changeText(this.selection.current, text)
+    );
+    this.subscribeOnEvent("formula:done", () => this.selection.select());
   }
 
   destroy() {

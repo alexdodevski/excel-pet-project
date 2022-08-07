@@ -7,12 +7,6 @@ export class TableSelection {
     this.group = [];
     this.$table = $table;
     this.current;
-    this.init();
-  }
-
-  init() {
-    this.select = this.select.bind(this);
-    this.changeSelectText = this.changeSelectText.bind(this);
   }
 
   select($el = this.current) {
@@ -51,9 +45,5 @@ export class TableSelection {
     );
 
     return $cells;
-  }
-
-  changeSelectText(text) {
-    return DOMutils.changeText(this.current, text);
   }
 }

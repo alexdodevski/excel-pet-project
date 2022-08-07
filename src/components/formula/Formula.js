@@ -12,17 +12,18 @@ export class Formula extends ExcelComponent {
     });
   }
 
-  init() {
-    super.init();
+  prepare() {
     this.$input = this.$root.querySelector(".input");
-    this.subscribeOnEvent(
-      "table:select",
-      DOMutils.changeText.bind(this, this.$input)
-    );
-    this.subscribeOnEvent(
-      "table:input",
-      DOMutils.changeText.bind(this, this.$input)
-    );
+    this.subscribeEvents();
+  }
+
+  subscribeEvents() {
+    this.subscribeOnEvent("table:select", (text) => {
+      DOMutils.changeText(this.$input, text);
+    });
+    this.subscribeOnEvent("table:input", (text) => {
+      DOMutils.changeText(this.$input, text);
+    });
   }
 
   destroy() {
