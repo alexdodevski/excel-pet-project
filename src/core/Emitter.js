@@ -2,7 +2,7 @@ export class Emitter {
   constructor() {
     this.listeners = {};
   }
-  // уведомляем подписчика если они есть
+  // уведомляем подписчиков если они есть
   emit(event, ...args) {
     if (this.listeners[event].size != 0) {
       this.listeners[event].forEach((fn) => {
