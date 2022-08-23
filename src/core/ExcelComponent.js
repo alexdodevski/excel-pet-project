@@ -33,7 +33,6 @@ export default class ExcelComponent extends DomListener {
   unsubscribeOnEvent() {
     // eslint-disable-next-line guard-for-in
     for (const [event, fn] of Object.entries(this.subs)) {
-      console.log("from component", event, fn);
       this.emitter.unsubscribe(event, fn);
     }
   }
