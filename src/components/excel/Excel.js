@@ -8,11 +8,13 @@ export class Excel {
     this.$app = document.querySelector(selector);
     this.components = options.components || [];
     this.emitter = new Emitter();
+    this.store = options.store;
   }
 
   initComponent(Component) {
     const componentOptions = {
       emitter: this.emitter,
+      store: this.store,
     };
 
     const $rootComponent = DOMutils.create("div", Component.className);

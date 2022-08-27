@@ -3,6 +3,8 @@ const CODES = {
   Z: 90,
 };
 
+const DEFAUL_WIDTH = 120;
+
 function toCell(row) {
   return function (_, col) {
     return `<div class="cell" 
@@ -12,10 +14,15 @@ function toCell(row) {
   };
 }
 
-function toColumn(col, index) {
-  return `<div class="column" data-type="resizeble" data-col='${index}'>${col}
+function toColumn(col, index, width) {
+  return `<div class="column" data-type="resizeble" style="width:${width}" 
+   data-col='${index}'>${col} 
           <div class="col-resize" data-resize="col"></div>
   </div>`;
+}
+
+function getWidth(state, index) {
+  return state[index] + "px" || DEFAUL_WIDTH + "px";
 }
 
 function createRow(index, content) {
@@ -34,11 +41,20 @@ function toChar(_, index) {
   return String.fromCharCode(CODES.A + index);
 }
 
-export function createTable(rowsCount = 15) {
+export function createTable(rowsCount = 15, state) {
+  const colState = state.colState;
+  console.log(colState);
   const colsCount = CODES.Z - CODES.A + 1;
   const rows = [];
 
-  const cols = new Array(colsCount).fill("").map(toChar).map(toColumn).join("");
+  const cols = new Array(colsCount)
+    .fill("")
+    .map(toChar)
+    .map((col, index) => {
+      const width = getWidth(colState, index);
+      return toColumn(col, index, width);
+    })
+    .join("");
 
   rows.push(createRow(null, cols));
 

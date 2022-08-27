@@ -4,6 +4,7 @@ import { isCell, nextSelect, shouldResize } from "./table.functions";
 import { resizer } from "./table.resizer";
 import { createTable } from "./table.template";
 import { TableSelection } from "./TableSelection";
+import * as action from "../../redux/actions.js";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -17,7 +18,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(this.#ROWS);
+    return createTable(this.#ROWS, this.store.getState());
   }
 
   prepare() {
@@ -31,7 +32,6 @@ export class Table extends ExcelComponent {
     this.selection.select($firstCell);
 
     this.giveCellText($firstCell, "table:select");
-    setTimeout(() => this.unsubscribeOnEvent(), 2000);
   }
 
   subscribeEvents() {
@@ -51,17 +51,27 @@ export class Table extends ExcelComponent {
     this.emitEvent(event, text);
   }
 
+  async resizeTable($target) {
+    try {
+      const data = await resizer(this.$root, $target);
+      this.dispatch(action.tableResize(data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   onMousedown(event) {
     const $target = event.target;
 
     if (shouldResize($target)) {
       event.preventDefault();
-      resizer(this.$root, $target);
+      this.resizeTable($target);
     } else if (isCell($target)) {
       if (event.shiftKey) {
         this.selection.selectGroup($target);
       } else {
         this.selection.select($target);
+        this.dispatch({ type: "TEST" });
         this.giveCellText(this.selection.current, "table:select");
       }
     }
