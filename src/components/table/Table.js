@@ -35,9 +35,10 @@ export class Table extends ExcelComponent {
   }
 
   subscribeEvents() {
-    this.subscribeOnEvent("formula:input", (text) =>
-      DOMutils.changeText(this.selection.current, text)
-    );
+    this.subscribeOnEvent("formula:input", (text) => {
+      DOMutils.changeText(this.selection.current, text);
+      this.updateStoreText(text);
+    });
     this.subscribeOnEvent("formula:done", () => this.selection.select());
   }
 
@@ -54,13 +55,7 @@ export class Table extends ExcelComponent {
   async resizeTable($target) {
     try {
       const data = await resizer(this.$root, $target);
-
-      const operation =
-        data.type === "row"
-          ? action.rowResize(data)
-          : action.columnResize(data);
-
-      this.dispatch(operation);
+      this.dispatch(action.tableResize(data));
     } catch (error) {
       console.log(error);
     }
@@ -106,11 +101,20 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateStoreText(value) {
+    this.dispatch(
+      action.changeText({
+        id: this.selection.current.dataset.id,
+        value,
+      })
+    );
+  }
+
   onInput(event) {
     const $target = event.target;
-
-    if (isCell($target)) {
-      this.giveCellText(this.selection.current, "table:input");
-    }
+    // if (isCell($target)) {
+    //   this.giveCellText(this.selection.current, "table:input");
+    // }
+    this.updateStoreText(DOMutils.getText($target));
   }
 }

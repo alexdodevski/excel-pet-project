@@ -1,19 +1,21 @@
-import { ROW_RESIZE, COLUMN_RESIZE } from "./types";
+import { CHANGE_TEXT, TABLE_RESIZE } from "./types";
 
 // Pure Function
 export function rootReducer(state, action) {
-  let colState;
-  let rowState;
+  let currState;
+  let field;
+  console.log("Action:", action);
   switch (action.type) {
-    case COLUMN_RESIZE:
-      colState = state.colState || {};
-      colState[action.data.id] = action.data.value;
-      return { ...state, colState: colState };
+    case TABLE_RESIZE:
+      field = action.data.type === "col" ? "colState" : "rowState";
+      currState = state[field] || {};
+      currState[action.data.id] = action.data.value;
+      return { ...state, [field]: currState };
 
-    case ROW_RESIZE:
-      rowState = state.rowState || {};
-      rowState[action.data.id] = action.data.value;
-      return { ...state, rowState: rowState };
+    case CHANGE_TEXT:
+      currState = state["dataState"] || {};
+      currState[action.data.id] = action.data.value;
+      return { ...state, currentText: action.data.value, dataState: currState };
 
     default:
       return state;

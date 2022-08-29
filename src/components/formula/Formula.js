@@ -21,9 +21,12 @@ export class Formula extends ExcelComponent {
     this.subscribeOnEvent("table:select", (text) => {
       DOMutils.changeText(this.$input, text);
     });
-    this.subscribeOnEvent("table:input", (text) => {
-      DOMutils.changeText(this.$input, text);
-    });
+    // this.subscribeOnEvent("table:input", (text) => {
+    //   DOMutils.changeText(this.$input, text);
+    // });
+    this.subscribeStore((state) =>
+      DOMutils.changeText(this.$input, state.currentText)
+    );
   }
 
   destroy() {

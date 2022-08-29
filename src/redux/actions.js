@@ -1,16 +1,17 @@
-import { COLUMN_RESIZE, ROW_RESIZE } from "./types";
+import { CHANGE_TEXT, TABLE_RESIZE } from "./types";
 
 // action creator
-export function columnResize(data) {
+
+export function tableResize(data) {
   return {
-    type: COLUMN_RESIZE,
-    data: data,
+    type: TABLE_RESIZE,
+    data,
   };
 }
 
-export function rowResize(data) {
+export function changeText(data) {
   return {
-    type: ROW_RESIZE,
-    data: data,
+    type: CHANGE_TEXT,
+    data,
   };
 }
