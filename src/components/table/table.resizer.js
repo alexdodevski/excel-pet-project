@@ -46,6 +46,7 @@ function columnResize($resizer, $table) {
       resolve({
         value: value,
         id: idCol,
+        type: "col",
       });
 
       $resizer.style.left = value - $resizer.offsetWidth + "px";
@@ -63,6 +64,7 @@ function rowResize($resizer) {
     let value;
     const $row = $resizer.closest('[data-type="resizeble"]');
     const rowCoords = DOMutils.getCoords($row);
+    const rowId = $row.dataset.id;
 
     $resizer.style.width = $row.offsetWidth + "px";
     $resizer.style.zIndex = 1000;
@@ -76,6 +78,12 @@ function rowResize($resizer) {
     document.addEventListener("mousemove", moveRowAt);
     document.onmouseup = () => {
       value < minHeight ? (value = minHeight) : value;
+
+      resolve({
+        value: value,
+        id: rowId,
+        type: "row",
+      });
 
       $resizer.style.top = value - $resizer.offsetHeight + "px";
       $resizer.style.zIndex = 100;
