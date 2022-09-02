@@ -8,6 +8,7 @@ export class Formula extends ExcelComponent {
     super($root, {
       name: "Formula",
       listeners: ["input", "keydown"],
+      subscribe: ["currentText"],
       ...options,
     });
   }
@@ -15,6 +16,10 @@ export class Formula extends ExcelComponent {
   prepare() {
     this.$input = this.$root.querySelector(".input");
     this.subscribeEvents();
+  }
+
+  storeChanged({ currentText }) {
+    DOMutils.changeText(this.$input, currentText);
   }
 
   subscribeEvents() {

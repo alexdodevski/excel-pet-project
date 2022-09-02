@@ -32,4 +32,22 @@ export const DOMutils = {
   changeText($el, text) {
     $el.textContent = text;
   },
+  getStyles(styles = [], $el) {
+    return styles.reduce((res, s) => {
+      res[s] = $el.style[s];
+      return res;
+    }, {});
+  },
+  attr($el, name, value) {
+    if (value) {
+      $el.setAttribute(name, value);
+    }
+    $el.getAttribute(name);
+  },
+  parseCell(value) {
+    if (value.startsWith("=")) {
+      return eval(value.slice(1));
+    }
+    return value;
+  },
 };

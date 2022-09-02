@@ -4,6 +4,8 @@ import { isCell, nextSelect, shouldResize } from "./table.functions";
 import { resizer } from "./table.resizer";
 import { createTable } from "./table.template";
 import { TableSelection } from "./TableSelection";
+import * as action from "../../redux/actions.js";
+import { defaultStyles } from "../../constans";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -17,7 +19,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(this.#ROWS);
+    return createTable(this.#ROWS, this.store.getState());
   }
 
   prepare() {
@@ -31,14 +33,22 @@ export class Table extends ExcelComponent {
     this.selection.select($firstCell);
 
     this.giveCellText($firstCell, "table:select");
-    setTimeout(() => this.unsubscribeOnEvent(), 2000);
   }
 
   subscribeEvents() {
-    this.subscribeOnEvent("formula:input", (text) =>
-      DOMutils.changeText(this.selection.current, text)
-    );
+    this.subscribeOnEvent("formula:input", (text) => {
+      DOMutils.attr(this.selection.current, "data-value", text);
+      const parsedText = DOMutils.parseCell(text);
+      DOMutils.changeText(this.selection.current, parsedText);
+      this.updateStoreText(text);
+    });
     this.subscribeOnEvent("formula:done", () => this.selection.select());
+    this.subscribeOnEvent("toolbar:applyStyle", (value) => {
+      this.selection.applyStyle(value);
+      this.dispatch(
+        action.apllyStyle({ value, ids: this.selection.selectedIds })
+      );
+    });
   }
 
   destroy() {
@@ -47,8 +57,17 @@ export class Table extends ExcelComponent {
   }
 
   giveCellText($cell, event) {
-    const text = DOMutils.getText($cell);
+    const text = $cell.dataset.value;
     this.emitEvent(event, text);
+  }
+
+  async resizeTable($target) {
+    try {
+      const data = await resizer(this.$root, $target);
+      this.dispatch(action.tableResize(data));
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   onMousedown(event) {
@@ -56,13 +75,16 @@ export class Table extends ExcelComponent {
 
     if (shouldResize($target)) {
       event.preventDefault();
-      resizer(this.$root, $target);
+      this.resizeTable($target);
     } else if (isCell($target)) {
       if (event.shiftKey) {
         this.selection.selectGroup($target);
       } else {
         this.selection.select($target);
         this.giveCellText(this.selection.current, "table:select");
+
+        const styles = DOMutils.getStyles(Object.keys(defaultStyles), $target);
+        this.dispatch(action.changeStyles(styles));
       }
     }
   }
@@ -90,11 +112,20 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateStoreText(value) {
+    this.dispatch(
+      action.changeText({
+        id: this.selection.current.dataset.id,
+        value,
+      })
+    );
+  }
+
   onInput(event) {
     const $target = event.target;
-
     if (isCell($target)) {
       this.giveCellText(this.selection.current, "table:input");
     }
+    this.updateStoreText(DOMutils.getText($target));
   }
 }

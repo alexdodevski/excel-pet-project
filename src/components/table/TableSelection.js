@@ -23,6 +23,13 @@ export class TableSelection {
     this.group.forEach((cell) => DOMutils.addClass(cell, this.#CLASS_NAME));
   }
 
+  get selectedIds() {
+    return this.group.map(($el) => {
+      console.log($el.dataset.id);
+      return $el.dataset.id;
+    });
+  }
+
   clearSelect() {
     this.group.forEach((cell) => DOMutils.removeClass(cell, this.#CLASS_NAME));
     this.group = [];
@@ -45,5 +52,12 @@ export class TableSelection {
     );
 
     return $cells;
+  }
+
+  applyStyle(style) {
+    const [key, value] = Object.entries(style)[0];
+    this.group.forEach(($el) => {
+      $el.style[key] = `${value}`;
+    });
   }
 }
