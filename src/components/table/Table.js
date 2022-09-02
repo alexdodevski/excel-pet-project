@@ -5,6 +5,7 @@ import { resizer } from "./table.resizer";
 import { createTable } from "./table.template";
 import { TableSelection } from "./TableSelection";
 import * as action from "../../redux/actions.js";
+import { defaultStyles } from "../../constans";
 
 export class Table extends ExcelComponent {
   static className = "excel__table";
@@ -36,10 +37,18 @@ export class Table extends ExcelComponent {
 
   subscribeEvents() {
     this.subscribeOnEvent("formula:input", (text) => {
-      DOMutils.changeText(this.selection.current, text);
+      DOMutils.attr(this.selection.current, "data-value", text);
+      const parsedText = DOMutils.parseCell(text);
+      DOMutils.changeText(this.selection.current, parsedText);
       this.updateStoreText(text);
     });
     this.subscribeOnEvent("formula:done", () => this.selection.select());
+    this.subscribeOnEvent("toolbar:applyStyle", (value) => {
+      this.selection.applyStyle(value);
+      this.dispatch(
+        action.apllyStyle({ value, ids: this.selection.selectedIds })
+      );
+    });
   }
 
   destroy() {
@@ -48,7 +57,7 @@ export class Table extends ExcelComponent {
   }
 
   giveCellText($cell, event) {
-    const text = DOMutils.getText($cell);
+    const text = $cell.dataset.value;
     this.emitEvent(event, text);
   }
 
@@ -72,8 +81,10 @@ export class Table extends ExcelComponent {
         this.selection.selectGroup($target);
       } else {
         this.selection.select($target);
-        this.dispatch({ type: "TEST" });
         this.giveCellText(this.selection.current, "table:select");
+
+        const styles = DOMutils.getStyles(Object.keys(defaultStyles), $target);
+        this.dispatch(action.changeStyles(styles));
       }
     }
   }
@@ -112,9 +123,9 @@ export class Table extends ExcelComponent {
 
   onInput(event) {
     const $target = event.target;
-    // if (isCell($target)) {
-    //   this.giveCellText(this.selection.current, "table:input");
-    // }
+    if (isCell($target)) {
+      this.giveCellText(this.selection.current, "table:input");
+    }
     this.updateStoreText(DOMutils.getText($target));
   }
 }

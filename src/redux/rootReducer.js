@@ -1,23 +1,53 @@
-import { CHANGE_TEXT, TABLE_RESIZE } from "./types";
+import {
+  CHANGE_TEXT,
+  CHANGE_STYLES,
+  TABLE_RESIZE,
+  APPLY_STYLE,
+  CHANGE_TITLE,
+} from "./types";
 
 // Pure Function
 export function rootReducer(state, action) {
-  let currState;
   let field;
-  console.log("Action:", action);
+
   switch (action.type) {
     case TABLE_RESIZE:
       field = action.data.type === "col" ? "colState" : "rowState";
-      currState = state[field] || {};
-      currState[action.data.id] = action.data.value;
-      return { ...state, [field]: currState };
+      return { ...state, [field]: value(state, field, action) };
 
     case CHANGE_TEXT:
-      currState = state["dataState"] || {};
-      currState[action.data.id] = action.data.value;
-      return { ...state, currentText: action.data.value, dataState: currState };
+      field = "dataState";
+      return {
+        ...state,
+        currentText: action.data.value,
+        [field]: value(state, field, action),
+      };
 
+    case CHANGE_STYLES:
+      return { ...state, currentStyles: action.data };
+    case APPLY_STYLE:
+      field = "stylesState";
+      // eslint-disable-next-line no-case-declarations
+      const val = state[field] || {};
+      console.log(action.data.ids);
+      action.data.ids.forEach((id) => {
+        val[id] = { ...val[id], ...action.data.value };
+      });
+      return {
+        ...state,
+        [field]: val,
+        currentStyles: { ...state.currentStyles, ...action.data.value },
+      };
+
+    case CHANGE_TITLE:
+      return { ...state, title: action.data };
     default:
       return state;
   }
+}
+
+function value(state, field, action) {
+  const val = state[field] || {};
+  val[action.data.id] = action.data.value;
+  return val;
 }

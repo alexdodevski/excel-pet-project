@@ -6,16 +6,18 @@ import { Formula } from "./components/formula/Formula";
 import { Table } from "./components/table/Table";
 import { Toolbar } from "./components/toolbar/Toolbar";
 import { createStore } from "./core/createStore";
-import { storage } from "./core/utils";
+import { storage, debounce } from "./core/utils";
 import { initinalState } from "./redux/initialState";
 import { rootReducer } from "./redux/rootReducer";
 import "./sass/index.sass";
 
 const store = createStore(rootReducer, initinalState);
 
-store.subscribe((state) => {
+const stateListeneer = debounce((state) => {
   storage("excel-state", state);
-});
+}, 200);
+
+store.subscribe(stateListeneer);
 
 const excel = new Excel("#app", {
   components: [Header, Toolbar, Formula, Table],
@@ -23,11 +25,3 @@ const excel = new Excel("#app", {
 });
 
 excel.render();
-
-document.onclick = function (e) {
-  console.log(e.type);
-};
-
-document.ondblclick = function (e) {
-  console.log(e.type);
-};
