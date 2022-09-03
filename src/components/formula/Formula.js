@@ -26,15 +26,8 @@ export class Formula extends ExcelComponent {
     this.subscribeOnEvent("table:select", (text) => {
       DOMutils.changeText(this.$input, text);
     });
-    this.subscribeOnEvent("table:input", (text) => {
-      DOMutils.changeText(this.$input, text);
-    });
   }
 
-  destroy() {
-    super.destroy();
-    this.unsubscribeOnEvent();
-  }
   toHTML() {
     return `
           <div class="info">fx</div>

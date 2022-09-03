@@ -14,8 +14,8 @@ export function createStore(rootReducer, initalState = {}) {
       return JSON.parse(JSON.stringify(state));
     },
 
-    unsubscribe(fn) {
-      listeners.delete(fn);
+    unsubscribe() {
+      listeners.clear();
     },
   };
 }

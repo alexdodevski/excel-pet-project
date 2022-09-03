@@ -13,11 +13,11 @@ import "./sass/index.sass";
 
 const store = createStore(rootReducer, initinalState);
 
-const stateListeneer = debounce((state) => {
+const stateListener = debounce((state) => {
   storage("excel-state", state);
 }, 200);
 
-store.subscribe(stateListeneer);
+store.subscribe(stateListener);
 
 const excel = new Excel("#app", {
   components: [Header, Toolbar, Formula, Table],

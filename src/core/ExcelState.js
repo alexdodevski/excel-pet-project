@@ -3,7 +3,6 @@ import ExcelComponent from "./ExcelComponent";
 export class ExcelState extends ExcelComponent {
   constructor(...args) {
     super(...args);
-    this.prepare();
   }
 
   getTemplate() {

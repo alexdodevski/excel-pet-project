@@ -25,11 +25,11 @@ export function rootReducer(state, action) {
 
     case CHANGE_STYLES:
       return { ...state, currentStyles: action.data };
+
     case APPLY_STYLE:
       field = "stylesState";
       // eslint-disable-next-line no-case-declarations
       const val = state[field] || {};
-      console.log(action.data.ids);
       action.data.ids.forEach((id) => {
         val[id] = { ...val[id], ...action.data.value };
       });
@@ -41,6 +41,7 @@ export function rootReducer(state, action) {
 
     case CHANGE_TITLE:
       return { ...state, title: action.data };
+
     default:
       return state;
   }

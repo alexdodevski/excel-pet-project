@@ -8,7 +8,6 @@ export default class ExcelComponent extends DomListener {
     this.subs = {};
     this.store = options.store;
     this.subscribe = options.subscribe || "";
-    this.unsubscribers = [];
   }
   toHTML() {
     return ``;
@@ -22,7 +21,7 @@ export default class ExcelComponent extends DomListener {
 
   destroy() {
     this.removeDOMListeners();
-    this.storeSub.unsubscribe();
+    this.unsubscribeOnEvents();
   }
 
   emitEvent(event, ...data) {
@@ -36,7 +35,7 @@ export default class ExcelComponent extends DomListener {
     this.emitter.subscribe(event, fn);
   }
 
-  unsubscribeOnEvent() {
+  unsubscribeOnEvents() {
     // eslint-disable-next-line guard-for-in
     for (const [event, fn] of Object.entries(this.subs)) {
       this.emitter.unsubscribe(event, fn);
@@ -50,13 +49,4 @@ export default class ExcelComponent extends DomListener {
   isWatching(key) {
     return this.subscribe.includes(key);
   }
-
-  //   subscribeStore(fn) {
-  //     this.store.subscribe(fn);
-  //     this.storeSub = fn;
-  //   }
-
-  // unsubscribeStore() {
-  //   this.store.unsubscribeStore(this.storeSub);
-  // }
 }
