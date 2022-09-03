@@ -51,11 +51,6 @@ export class Table extends ExcelComponent {
     });
   }
 
-  destroy() {
-    super.destroy();
-    this.unsubscribeOnEvent();
-  }
-
   giveCellText($cell, event) {
     const text = $cell.dataset.value;
     this.emitEvent(event, text);
@@ -123,9 +118,6 @@ export class Table extends ExcelComponent {
 
   onInput(event) {
     const $target = event.target;
-    if (isCell($target)) {
-      this.giveCellText(this.selection.current, "table:input");
-    }
     this.updateStoreText(DOMutils.getText($target));
   }
 }

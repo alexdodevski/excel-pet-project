@@ -35,12 +35,14 @@ export class Excel {
     this.components = this.components.map((Component) =>
       this.initComponent(Component)
     );
+
+    this.subscriber.setComponents(this.components);
   }
 
   render() {
     this.createExcel();
     this.$app.append(this.$excel);
-    this.subscriber.subComponents(this.components);
+    this.subscriber.subComponents();
     this.components.forEach((component) => component.init());
   }
 

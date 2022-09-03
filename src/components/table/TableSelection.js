@@ -25,7 +25,6 @@ export class TableSelection {
 
   get selectedIds() {
     return this.group.map(($el) => {
-      console.log($el.dataset.id);
       return $el.dataset.id;
     });
   }

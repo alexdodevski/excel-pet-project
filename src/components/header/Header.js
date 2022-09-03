@@ -21,11 +21,6 @@ export class Header extends ExcelComponent {
     super.init();
   }
 
-  destroy() {
-    super.destroy();
-    this.unsubscribeOnEvent();
-  }
-
   toHTML() {
     const title = this.store.getState().title || defaultTitle;
     return `<input type="text" class="input" value="${title}" />

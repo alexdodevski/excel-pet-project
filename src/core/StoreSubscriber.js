@@ -4,16 +4,21 @@ export class StoreSubscriber {
   constructor(store) {
     this.store = store;
     this.sub = null;
+    this.components = null;
     this.prevState = {};
   }
 
-  subComponents(components) {
+  setComponents(components) {
+    this.components = components;
+  }
+
+  subComponents() {
     this.prevState = this.store.getState();
 
     this.sub = this.store.subscribe((state) => {
       Object.keys(state).forEach((key) => {
         if (!isEqual(this.prevState[key], state[key])) {
-          components.forEach((component) => {
+          this.components.forEach((component) => {
             if (component.isWatching(key)) {
               const changes = { [key]: state[key] };
               component.storeChanged(changes);
@@ -25,6 +30,6 @@ export class StoreSubscriber {
     });
   }
   unsubFromStore() {
-    this.sub.unsubscribe();
+    this.store.unsubscribe();
   }
 }

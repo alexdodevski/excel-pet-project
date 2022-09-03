@@ -11,30 +11,23 @@ export class Toolbar extends ExcelState {
       subscribe: ["currentStyles"],
       ...options,
     });
+    this.initState(defaultStyles);
   }
 
   init() {
     super.init();
   }
 
-  prepare() {
-    this.initState(defaultStyles);
-  }
-
   getTemplate() {
     return createToolbar(this.state);
   }
 
-  destroy() {
-    super.destroy();
-    this.unsubscribeOnEvent();
-  }
   toHTML() {
     return this.getTemplate();
   }
 
-  storeChanged(changes) {
-    this.setState(changes.currentStyles);
+  storeChanged({ currentStyles }) {
+    this.setState(currentStyles);
   }
 
   onClick(e) {
@@ -42,9 +35,6 @@ export class Toolbar extends ExcelState {
     if ($target.dataset.type === "button") {
       const value = JSON.parse($target.dataset.value);
       this.emitEvent("toolbar:applyStyle", value);
-
-      // const key = Object.keys(value)[0];
-      // this.setState({ [key]: value[key] });
     }
   }
 }
