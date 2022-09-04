@@ -1,8 +1,8 @@
 import { defaultStyles } from "../../constans";
-import { ExcelState } from "../../core/ExcelState";
+import { ExcelStateComponent } from "../../core/ExcelStateComponent";
 import { createToolbar } from "./createToolbar";
 
-export class Toolbar extends ExcelState {
+export class Toolbar extends ExcelStateComponent {
   static className = "excel__toolbar";
   constructor($root, options) {
     super($root, {

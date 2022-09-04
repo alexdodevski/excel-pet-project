@@ -31,7 +31,7 @@ export class Table extends ExcelComponent {
     super.init();
     const $firstCell = this.$root.querySelector("[data-id='0:0']");
     this.selection.select($firstCell);
-
+    this.updateCurrentStyle($firstCell);
     this.giveCellText($firstCell, "table:select");
   }
 
@@ -49,6 +49,11 @@ export class Table extends ExcelComponent {
         action.apllyStyle({ value, ids: this.selection.selectedIds })
       );
     });
+  }
+
+  updateCurrentStyle($elem) {
+    const styles = DOMutils.getStyles(Object.keys(defaultStyles), $elem);
+    this.dispatch(action.changeStyles(styles));
   }
 
   giveCellText($cell, event) {
@@ -77,9 +82,7 @@ export class Table extends ExcelComponent {
       } else {
         this.selection.select($target);
         this.giveCellText(this.selection.current, "table:select");
-
-        const styles = DOMutils.getStyles(Object.keys(defaultStyles), $target);
-        this.dispatch(action.changeStyles(styles));
+        this.updateCurrentStyle($target);
       }
     }
   }
