@@ -1,4 +1,3 @@
-import { defaultStyles } from "../../constans";
 import { ExcelStateComponent } from "../../core/ExcelStateComponent";
 import { createToolbar } from "./createToolbar";
 
@@ -11,11 +10,7 @@ export class Toolbar extends ExcelStateComponent {
       subscribe: ["currentStyles"],
       ...options,
     });
-    this.initState(defaultStyles);
-  }
-
-  init() {
-    super.init();
+    this.initState(this.store.getState().currentStyles);
   }
 
   getTemplate() {
