@@ -1,6 +1,3 @@
-import { initinalState } from "../redux/initialState";
-import { rootReducer } from "../redux/rootReducer";
-
 export class ExcelStore {
   constructor(rootReducer, initalState = {}) {
     this.initalState = initalState;
@@ -24,6 +21,6 @@ export class ExcelStore {
   }
 }
 
-export function createStore() {
+export function createStore(rootReducer, initinalState) {
   return new ExcelStore(rootReducer, initinalState);
 }

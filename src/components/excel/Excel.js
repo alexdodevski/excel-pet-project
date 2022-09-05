@@ -1,12 +1,12 @@
 import { DOMutils } from "../../core/dom.utils";
 import { Emitter } from "../../core/Emitter";
 import { StoreSubscriber } from "../../core/StoreSubscriber";
+import { preventDefault } from "../../core/utils";
 
 export class Excel {
   static className = "excel";
 
-  constructor(selector, options) {
-    this.$app = document.querySelector(selector);
+  constructor(options) {
     this.components = options.components || [];
     this.emitter = new Emitter();
     this.store = options.store;
@@ -39,9 +39,15 @@ export class Excel {
     this.subscriber.setComponents(this.components);
   }
 
-  render() {
+  getRoot() {
     this.createExcel();
-    this.$app.append(this.$excel);
+    return this.$excel;
+  }
+
+  init() {
+    if (process.env.NODE_ENV === "production") {
+      document.addEventListener("contextmenu", preventDefault);
+    }
     this.subscriber.subComponents();
     this.components.forEach((component) => component.init());
   }
@@ -49,5 +55,6 @@ export class Excel {
   destroy() {
     this.subscriber.unsubFromStore();
     this.components.forEach((component) => component.destroy());
+    document.removeEventListener("contextmenu", preventDefault);
   }
 }
