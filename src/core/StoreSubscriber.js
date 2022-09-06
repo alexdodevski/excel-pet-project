@@ -5,7 +5,7 @@ export class StoreSubscriber {
     this.store = store;
     this.sub = null;
     this.components = null;
-    this.prevState = {};
+    this.currState = {};
   }
 
   setComponents(components) {
@@ -13,11 +13,11 @@ export class StoreSubscriber {
   }
 
   subComponents() {
-    this.prevState = this.store.getState();
+    this.currState = this.store.getState();
 
     this.sub = this.store.subscribe((state) => {
       Object.keys(state).forEach((key) => {
-        if (!isEqual(this.prevState[key], state[key])) {
+        if (!isEqual(this.currState[key], state[key])) {
           this.components.forEach((component) => {
             if (component.isWatching(key)) {
               const changes = { [key]: state[key] };
@@ -26,10 +26,10 @@ export class StoreSubscriber {
           });
         }
       });
-      this.prevState = this.store.getState();
+      this.currState = this.store.getState();
 
       if (process.env.NODE_ENV === "development") {
-        window["redux"] = this.prevState;
+        window["redux"] = this.currState;
       }
     });
   }
