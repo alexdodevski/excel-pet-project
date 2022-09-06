@@ -1,7 +1,7 @@
 import { storage } from "../core/utils";
 
 function toHTML(key) {
-  const num = getNum(key);
+  const num = getId(key);
   const date = new Date(num);
   const model = storage(key);
   const id = key.split(":")[1];
@@ -16,10 +16,6 @@ function toHTML(key) {
             </li>`;
 }
 
-function getNum(elem) {
-  return +elem.slice(elem.indexOf(":") + 1);
-}
-
 function getAllKeys() {
   const keys = [];
   for (let i = 0; i < localStorage.length; i++) {
@@ -32,7 +28,7 @@ function getAllKeys() {
 }
 
 function getId(key) {
-  return key.split(":")[1];
+  return +key.split(":")[1];
 }
 
 function toKey(id) {

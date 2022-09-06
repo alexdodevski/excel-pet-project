@@ -17,10 +17,6 @@ const normalize = (state) => ({
   currentText: "",
 });
 
-// export const initinalState = storage("excel-state")
-//   ? normalize(storage("excel-state"))
-//   : defaultState;
-
 export function normalizeState(state) {
   return state ? normalize(state) : cloneObj(defaultState);
 }
