@@ -42,7 +42,9 @@ export class Table extends ExcelComponent {
       DOMutils.changeText(this.selection.current, parsedText);
       this.updateStoreText(text);
     });
+
     this.subscribeOnEvent("formula:done", () => this.selection.select());
+
     this.subscribeOnEvent("toolbar:applyStyle", (value) => {
       this.selection.applyStyle(value);
       this.dispatch(

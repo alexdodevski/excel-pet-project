@@ -21,7 +21,7 @@ export default class ExcelComponent extends DomListener {
 
   destroy() {
     this.removeDOMListeners();
-    this.unsubscribeOnEvents();
+    this.unsubscribeFromEvents();
   }
 
   emitEvent(event, ...data) {
@@ -35,7 +35,7 @@ export default class ExcelComponent extends DomListener {
     this.emitter.subscribe(event, fn);
   }
 
-  unsubscribeOnEvents() {
+  unsubscribeFromEvents() {
     // eslint-disable-next-line guard-for-in
     for (const [event, fn] of Object.entries(this.subs)) {
       this.emitter.unsubscribe(event, fn);

@@ -1,5 +1,5 @@
 import { defaultStyles, defaultTitle } from "../constans.js";
-import { storage } from "../core/utils.js";
+import { cloneObj } from "../core/utils.js";
 
 const defaultState = {
   rowState: {},
@@ -17,6 +17,10 @@ const normalize = (state) => ({
   currentText: "",
 });
 
-export const initinalState = storage("excel-state")
-  ? normalize(storage("excel-state"))
-  : defaultState;
+// export const initinalState = storage("excel-state")
+//   ? normalize(storage("excel-state"))
+//   : defaultState;
+
+export function normalizeState(state) {
+  return state ? normalize(state) : cloneObj(defaultState);
+}

@@ -22,7 +22,6 @@ export class Emitter {
   // отписываемся от уведомления
   unsubscribe(event, fn) {
     if (this.listeners[event].has(fn)) {
-      console.log("from Emitter", event, fn);
       this.listeners[event].delete(fn);
     }
   }
