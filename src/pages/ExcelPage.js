@@ -20,6 +20,7 @@ export class ExcelPage extends Page {
       this.params = Date.now().toString();
       ActiveRoute.navigate(`#excel/${this.params}`);
     }
+
     const params = storageName(this.params);
     const state = storage(params);
     const store = createStore(rootReducer, normalizeState(state));
@@ -33,7 +34,6 @@ export class ExcelPage extends Page {
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
       store,
-      params,
     });
 
     return this.excel.getRoot();
