@@ -1,6 +1,6 @@
 import { DOMutils } from "../../core/dom.utils";
 import { Emitter } from "../../core/Emitter";
-import { StoreSubscriber } from "../../core/StoreSubscriber";
+import { StoreSubscriber } from "../../core/store/StoreSubscriber";
 import { preventDefault } from "../../core/utils";
 
 export class Excel {
