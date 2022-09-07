@@ -1,10 +1,8 @@
 import { storage } from "../core/utils";
 
-function toHTML(key) {
-  const num = getId(key);
-  const date = new Date(num);
-  const model = storage(key);
-  const id = key.split(":")[1];
+function toHTML(id) {
+  const date = new Date(id);
+  const model = storage(toKey(id));
 
   return ` <li class="dashboard__record">
               <a href="#excel/${id}">${model.title}</a>
@@ -48,7 +46,6 @@ export function createRecordsTable() {
           ${keys
             .map(getId)
             .sort((a, b) => b - a)
-            .map(toKey)
             .map(toHTML)
             .join("")}
           </ul>`;

@@ -4,6 +4,7 @@ import { createRecordsTable } from "./dashboard.functions";
 
 export class DashboardPage extends Page {
   getRoot() {
+    console.log(this.params);
     const now = Date.now().toString();
     const db = DOMutils.create("div", "dashboard");
     DOMutils.addHTML(
