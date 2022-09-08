@@ -1,6 +1,5 @@
-import { Page } from "../core/Page";
+import { Page } from "../core/page/Page";
 import { createStore } from "../core/store/createStore";
-import { debounce, storage } from "../core/utils";
 import { Excel } from "../components/excel/Excel";
 import { Header } from "../components/header/Header";
 import { Toolbar } from "../components/toolbar/Toolbar";
@@ -9,39 +8,46 @@ import { Table } from "../components/table/Table";
 import { rootReducer } from "../redux/rootReducer";
 import { normalizeState } from "../redux/initialState";
 import { ActiveRoute } from "../core/router/ActiveRoute";
-
-function storageName(param) {
-  return "excel:" + param;
-}
+import { StateProcessor } from "../core/page/StateProcessor";
+import { LocalStorageClient } from "./LocalStorageClient";
 
 export class ExcelPage extends Page {
-  getRoot() {
-    if (!this.params) {
-      this.params = Date.now().toString();
-      ActiveRoute.navigate(`#excel/${this.params}`);
-    }
+  constructor(params) {
+    super(params);
+    this.store = null;
+    this.localClient = new LocalStorageClient(this.params);
+    this.processor = new StateProcessor(this.localClient);
+  }
 
-    const params = storageName(this.params);
-    const state = storage(params);
-    const store = createStore(rootReducer, normalizeState(state));
+  async getRoot() {
+    this.checkParams();
 
-    const stateListener = debounce((state) => {
-      storage(params, state);
-    }, 200);
+    const state = await this.processor.get();
 
-    store.subscribe(stateListener);
+    this.store = createStore(rootReducer, normalizeState(state));
+    this.store.subscribe(this.processor.listen);
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
-      store,
+      store: this.store,
     });
 
     return this.excel.getRoot();
   }
+
+  checkParams() {
+    if (!this.params) {
+      this.params = Date.now().toString();
+      ActiveRoute.navigate(`#excel/${this.params}`);
+      this.localClient.key = this.params;
+    }
+  }
+
   afterRender() {
     this.excel.init();
   }
   destroy() {
     this.excel.destroy();
+    this.store.unsubscribe();
   }
 }
