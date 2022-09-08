@@ -1,10 +1,9 @@
-import { Page } from "@core/Page";
+import { Page } from "@core/page/Page";
 import { DOMutils } from "../core/dom.utils";
 import { createRecordsTable } from "./dashboard.functions";
 
 export class DashboardPage extends Page {
-  getRoot() {
-    console.log(this.params);
+  async getRoot() {
     const now = Date.now().toString();
     const db = DOMutils.create("div", "dashboard");
     DOMutils.addHTML(

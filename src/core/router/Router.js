@@ -1,3 +1,4 @@
+import { loader } from "../../components/loader/loader";
 import { DOMutils } from "../dom.utils";
 import { ActiveRoute } from "./ActiveRoute";
 
@@ -12,6 +13,7 @@ export class Router {
       document.createElement("div", selector); // for test
 
     this.routes = routes;
+    this.loader = loader();
 
     this.changePageHandler = this.changePageHandler.bind(this);
     this.page = null;
@@ -23,19 +25,21 @@ export class Router {
     this.changePageHandler();
   }
 
-  changePageHandler() {
+  async changePageHandler() {
     if (this.page) {
       this.page.destroy();
     }
     DOMutils.clear(this.$placeholder);
+    DOMutils.addHTML(this.$placeholder, this.loader);
 
     const Page = ActiveRoute.path.includes("excel")
       ? this.routes.excel
       : this.routes.dashboard;
 
     this.page = new Page(ActiveRoute.param);
-    const $root = this.page.getRoot();
+    const $root = await this.page.getRoot();
 
+    DOMutils.clear(this.$placeholder);
     this.$placeholder.append($root);
     this.page.afterRender();
   }
